@@ -165,13 +165,10 @@ describe('Mock Data', () => {
 
   describe('Data Consistency', () => {
     it('should have realistic ticket distribution across statuses', () => {
-      const statusCounts = mockTickets.reduce(
-        (acc, ticket) => {
-          acc[ticket.status] = (acc[ticket.status] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+      const statusCounts = mockTickets.reduce((acc, ticket) => {
+        acc[ticket.status] = (acc[ticket.status] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
 
       // Should have tickets in multiple statuses
       expect(Object.keys(statusCounts).length).toBeGreaterThan(1);
@@ -184,14 +181,11 @@ describe('Mock Data', () => {
     });
 
     it('should have realistic priority distribution', () => {
-      const priorityCounts = mockTickets.reduce(
-        (acc, ticket) => {
-          const priority = ticket.priority || 'none';
-          acc[priority] = (acc[priority] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+      const priorityCounts = mockTickets.reduce((acc, ticket) => {
+        const priority = ticket.priority || 'none';
+        acc[priority] = (acc[priority] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
 
       // Should have tickets with different priorities
       expect(Object.keys(priorityCounts).length).toBeGreaterThan(1);

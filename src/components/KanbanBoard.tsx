@@ -87,15 +87,12 @@ export const KanbanBoard = () => {
   });
 
   // Group tickets by status
-  const ticketsByStatus = COLUMN_CONFIG.reduce(
-    (acc, column) => {
-      acc[column.id] = filteredTickets.filter(
-        (ticket) => ticket.status === column.id,
-      );
-      return acc;
-    },
-    {} as Record<string, TicketType[]>,
-  );
+  const ticketsByStatus = COLUMN_CONFIG.reduce((acc, column) => {
+    acc[column.id] = filteredTickets.filter(
+      (ticket) => ticket.status === column.id,
+    );
+    return acc;
+  }, {} as Record<string, TicketType[]>);
 
   const handleDragStart = (event: DragStartEvent) => {
     const ticketId = event.active.id as string;
