@@ -6,47 +6,25 @@ import {CSS} from '@dnd-kit/utilities';
 import {Ticket as TicketType} from '../types/ticket';
 import {calculateTicketAge, formatDate} from '../utils/dateUtils';
 import {useTicketStore} from '../store/useTicketStore';
+import {
+  PRIORITY,
+  getPriorityConfig,
+  type Priority,
+} from '../constants/priority';
 
 interface TicketProps {
   ticket: TicketType;
   onClick?: () => void;
 }
 
-const PriorityBadge = ({priority}: {priority?: 'low' | 'medium' | 'high'}) => {
-  const getPriorityStyles = (priority?: 'low' | 'medium' | 'high') => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low':
-        return 'bg-green-100 text-green-800 border-green-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getPriorityIcon = (priority?: 'low' | 'medium' | 'high') => {
-    switch (priority) {
-      case 'high':
-        return '🔥';
-      case 'medium':
-        return '⚡';
-      case 'low':
-        return '🌱';
-      default:
-        return '📋';
-    }
-  };
+const PriorityBadge = ({priority}: {priority?: Priority}) => {
+  const config = getPriorityConfig(priority);
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getPriorityStyles(
-        priority,
-      )}`}
+      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${config.color}`}
     >
-      {getPriorityIcon(priority)}{' '}
-      {priority ? priority.charAt(0).toUpperCase() + priority.slice(1) : 'None'}
+      {config.icon} {config.label}
     </span>
   );
 };
@@ -74,9 +52,7 @@ export const Ticket = ({ticket, onClick}: TicketProps) => {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const handlePriorityChange = (
-    newPriority: 'low' | 'medium' | 'high' | null,
-  ) => {
+  const handlePriorityChange = (newPriority: Priority | null) => {
     console.log('Updating priority for ticket:', ticket.id, 'to:', newPriority);
     updateTicketPriority(ticket.id, newPriority);
     setShowPriorityMenu(false);
@@ -87,8 +63,8 @@ export const Ticket = ({ticket, onClick}: TicketProps) => {
     setShowPriorityMenu(!showPriorityMenu);
   };
 
-  // Debug: log current ticket priority
-  console.log('Ticket priority:', ticket.id, currentTicket.priority);
+  // Debug: log current ticket priority (commented out for cleaner test output)
+  // console.log('Ticket priority:', ticket.id, currentTicket.priority);
 
   return (
     <div
@@ -110,6 +86,7 @@ export const Ticket = ({ticket, onClick}: TicketProps) => {
         </h3>
         <div className="relative">
           <button
+            type="button"
             onClick={handlePriorityClick}
             className="hover:scale-110 transition-transform"
           >
@@ -121,25 +98,41 @@ export const Ticket = ({ticket, onClick}: TicketProps) => {
             <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[120px]">
               <div className="py-1">
                 <button
-                  onClick={() => handlePriorityChange(null)}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePriorityChange(null);
+                  }}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   📋 None
                 </button>
                 <button
-                  onClick={() => handlePriorityChange('low')}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePriorityChange(PRIORITY.LOW);
+                  }}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   🌱 Low
                 </button>
                 <button
-                  onClick={() => handlePriorityChange('medium')}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePriorityChange(PRIORITY.MEDIUM);
+                  }}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   ⚡ Medium
                 </button>
                 <button
-                  onClick={() => handlePriorityChange('high')}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePriorityChange(PRIORITY.HIGH);
+                  }}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   🔥 High

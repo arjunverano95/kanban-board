@@ -1,5 +1,6 @@
 import {Ticket} from '../types/ticket';
 import {COLUMN_STATUS} from '../constants/status';
+import {PRIORITY} from '../constants/priority';
 
 export const mockTickets: Ticket[] = [
   {
@@ -11,7 +12,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-20T14:30:00Z'),
     tags: ['frontend', 'security', 'auth'],
     status: COLUMN_STATUS.TODO,
-    priority: 'high',
+    priority: PRIORITY.HIGH,
   },
   {
     id: '2',
@@ -22,7 +23,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-18T16:45:00Z'),
     tags: ['database', 'planning', 'backend'],
     status: COLUMN_STATUS.IN_PROGRESS,
-    priority: 'medium',
+    priority: PRIORITY.MEDIUM,
   },
   {
     id: '3',
@@ -32,7 +33,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-19T10:15:00Z'),
     tags: ['api', 'backend', 'rest'],
     status: COLUMN_STATUS.IN_PROGRESS,
-    priority: 'high',
+    priority: PRIORITY.HIGH,
   },
   {
     id: '4',
@@ -43,7 +44,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-20T11:20:00Z'),
     tags: ['testing', 'quality', 'tdd'],
     status: COLUMN_STATUS.DONE,
-    priority: 'medium',
+    priority: PRIORITY.MEDIUM,
   },
   {
     id: '5',
@@ -54,7 +55,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-19T08:00:00Z'),
     tags: ['devops', 'ci-cd', 'automation'],
     status: COLUMN_STATUS.TODO,
-    // No priority set - will show "None"
+    priority: PRIORITY.LOW,
   },
   {
     id: '6',
@@ -64,7 +65,7 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date('2024-01-20T10:00:00Z'),
     tags: ['performance', 'optimization', 'monitoring'],
     status: COLUMN_STATUS.TODO,
-    priority: 'medium',
+    priority: PRIORITY.MEDIUM,
   },
 ];
 

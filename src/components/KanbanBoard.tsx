@@ -62,10 +62,10 @@ export const KanbanBoard = () => {
   useEffect(() => {
     // Wait for hydration to complete
     if (isHydrated && tickets.length === 0) {
-      console.log('No stored tickets found, loading from API...');
+      // console.log('No stored tickets found, loading from API...');
       loadInitialData();
     } else if (isHydrated && tickets.length > 0) {
-      console.log('Restored tickets from localStorage:', tickets.length);
+      // console.log('Restored tickets from localStorage:', tickets.length);
     }
   }, [isHydrated, tickets.length, loadInitialData]);
 
@@ -87,12 +87,15 @@ export const KanbanBoard = () => {
   });
 
   // Group tickets by status
-  const ticketsByStatus = COLUMN_CONFIG.reduce((acc, column) => {
-    acc[column.id] = filteredTickets.filter(
-      (ticket) => ticket.status === column.id,
-    );
-    return acc;
-  }, {} as Record<string, TicketType[]>);
+  const ticketsByStatus = COLUMN_CONFIG.reduce(
+    (acc, column) => {
+      acc[column.id] = filteredTickets.filter(
+        (ticket) => ticket.status === column.id,
+      );
+      return acc;
+    },
+    {} as Record<string, TicketType[]>,
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     const ticketId = event.active.id as string;
@@ -171,6 +174,7 @@ export const KanbanBoard = () => {
           </h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
+            type="button"
             onClick={loadInitialData}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -194,6 +198,7 @@ export const KanbanBoard = () => {
             Click the button below to load sample tickets
           </p>
           <button
+            type="button"
             onClick={loadInitialData}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >

@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import {availableTags} from '../data/mockTickets';
 import {useTicketStore} from '../store/useTicketStore';
+import {PRIORITY, type Priority} from '../constants/priority';
 
 export const SearchAndFilter = () => {
   const {
@@ -25,7 +26,7 @@ export const SearchAndFilter = () => {
     }
   };
 
-  const handlePriorityChange = (priority: 'low' | 'medium' | 'high' | null) => {
+  const handlePriorityChange = (priority: Priority | null) => {
     setSelectedPriority(priority);
     setIsPriorityDropdownOpen(false);
   };
@@ -37,9 +38,9 @@ export const SearchAndFilter = () => {
   };
 
   const priorityOptions = [
-    {value: 'high', label: '🔥 High Priority'},
-    {value: 'medium', label: '⚡ Medium Priority'},
-    {value: 'low', label: '🌱 Low Priority'},
+    {value: PRIORITY.HIGH, label: '🔥 High Priority'},
+    {value: PRIORITY.MEDIUM, label: '⚡ Medium Priority'},
+    {value: PRIORITY.LOW, label: '🌱 Low Priority'},
   ];
 
   const hasActiveFilters =
@@ -68,10 +69,14 @@ export const SearchAndFilter = () => {
 
         {/* Priority Filter */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="priority-filter"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Priority
           </label>
           <button
+            id="priority-filter"
             type="button"
             onClick={() => setIsPriorityDropdownOpen(!isPriorityDropdownOpen)}
             className="w-full lg:w-48 px-3 py-2 border border-gray-300 rounded-md bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -85,6 +90,7 @@ export const SearchAndFilter = () => {
             <div className="absolute z-10 mt-1 w-full lg:w-48 bg-white border border-gray-300 rounded-md shadow-lg">
               <div className="py-1">
                 <button
+                  type="button"
                   onClick={() => handlePriorityChange(null)}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
@@ -92,11 +98,10 @@ export const SearchAndFilter = () => {
                 </button>
                 {priorityOptions.map((option) => (
                   <button
+                    type="button"
                     key={option.value}
                     onClick={() =>
-                      handlePriorityChange(
-                        option.value as 'low' | 'medium' | 'high',
-                      )
+                      handlePriorityChange(option.value as Priority)
                     }
                     className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
                   >
@@ -110,10 +115,14 @@ export const SearchAndFilter = () => {
 
         {/* Tag Filter */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="tags-filter"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Tags
           </label>
           <button
+            id="tags-filter"
             type="button"
             onClick={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
             className="w-full lg:w-48 px-3 py-2 border border-gray-300 rounded-md bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -129,10 +138,12 @@ export const SearchAndFilter = () => {
             <div className="absolute z-10 mt-1 w-full lg:w-48 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
               {availableTags.map((tag) => (
                 <label
+                  htmlFor={`tag-${tag}`}
                   key={tag}
                   className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
                 >
                   <input
+                    id={`tag-${tag}`}
                     type="checkbox"
                     checked={selectedTags.includes(tag)}
                     onChange={() => handleTagToggle(tag)}
@@ -149,6 +160,7 @@ export const SearchAndFilter = () => {
         {hasActiveFilters && (
           <div className="flex items-end">
             <button
+              type="button"
               onClick={clearAllFilters}
               className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
@@ -166,6 +178,7 @@ export const SearchAndFilter = () => {
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                 Search: &quot;{searchText}&quot;
                 <button
+                  type="button"
                   onClick={() => setSearchText('')}
                   className="ml-1 text-blue-600 hover:text-blue-800"
                 >
@@ -181,6 +194,7 @@ export const SearchAndFilter = () => {
                     ?.label
                 }
                 <button
+                  type="button"
                   onClick={() => setSelectedPriority(null)}
                   className="ml-1 text-purple-600 hover:text-purple-800"
                 >
@@ -195,6 +209,7 @@ export const SearchAndFilter = () => {
               >
                 {tag}
                 <button
+                  type="button"
                   onClick={() => handleTagToggle(tag)}
                   className="ml-1 text-green-600 hover:text-green-800"
                 >

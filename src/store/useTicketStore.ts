@@ -2,13 +2,14 @@ import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
 import {Ticket} from '../types/ticket';
 import {ColumnStatus} from '../constants/status';
+import {type Priority} from '../constants/priority';
 
 interface TicketState {
   // State
   tickets: Ticket[];
   searchText: string;
   selectedTags: string[];
-  selectedPriority: 'low' | 'medium' | 'high' | null;
+  selectedPriority: Priority | null;
   isLoading: boolean;
   error: string | null;
   isHydrated: boolean; // Track if localStorage data has been loaded
@@ -17,7 +18,7 @@ interface TicketState {
   setTickets: (tickets: Ticket[]) => void;
   setSearchText: (text: string) => void;
   setSelectedTags: (tags: string[]) => void;
-  setSelectedPriority: (priority: 'low' | 'medium' | 'high' | null) => void;
+  setSelectedPriority: (priority: Priority | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setHydrated: (hydrated: boolean) => void;
@@ -26,7 +27,7 @@ interface TicketState {
   updateTicketStatus: (ticketId: string, newStatus: ColumnStatus) => void;
   updateTicketPriority: (
     ticketId: string,
-    priority: 'low' | 'medium' | 'high' | null | undefined,
+    priority: Priority | null | undefined,
   ) => void;
   reorderTickets: (ticketIds: string[]) => void;
 
@@ -68,7 +69,7 @@ export const useTicketStore = create<TicketState>()(
 
       updateTicketPriority: (
         ticketId: string,
-        priority: 'low' | 'medium' | 'high' | null | undefined,
+        priority: Priority | null | undefined,
       ) =>
         set((state) => {
           console.log(
