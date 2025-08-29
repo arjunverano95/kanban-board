@@ -1,33 +1,35 @@
 # Kanban Board
 
-A modern, responsive kanban board application built with Next.js, TypeScript, and Tailwind CSS. This project demonstrates a clean implementation of drag-and-drop functionality, state persistence, and responsive design.
+A modern, responsive kanban board application built with Next.js 15, TypeScript, and Tailwind CSS. This project demonstrates a clean implementation of drag-and-drop functionality, state persistence, and responsive design with a priority management system.
 
 ## Features
 
 ### Core Features
 
 - **Three Fixed Columns**: To Do, In Progress, and Done
-- **Ticket Management**: Each ticket includes name, description, creation date, update date, and tags
-- **Drag & Drop**: Move tickets between columns and reorder within columns
-- **Search & Filter**: Search tickets by name/description and filter by tags
+- **Ticket Management**: Each ticket includes name, description, creation date, update date, tags, and priority level
+- **Drag & Drop**: Move tickets between columns and reorder within columns using @dnd-kit
+- **Search & Filter**: Search tickets by name/description and filter by tags and priority
 - **Derived Fields**: Display ticket age calculated from creation date
-- **State Persistence**: Save and restore board state from local storage
+- **State Persistence**: Save and restore board state from local storage using Zustand persist middleware
 
 ### Additional Features
 
+- **Priority System**: Three priority levels (High 🔥, Medium ⚡, Low 🌱) with visual indicators
 - **Responsive Design**: Mobile-friendly layout that works on all screen sizes
 - **Loading States**: Graceful handling of loading, error, and empty states
-- **Tag System**: Comprehensive tagging system for better organization
+- **Tag System**: Comprehensive tagging system with multi-select filtering
 - **Modern UI**: Clean, accessible interface built with Tailwind CSS
+- **Real-time Updates**: Immediate state updates with automatic local storage persistence
 
 ## Technical Stack
 
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Drag & Drop**: @dnd-kit (modern, accessible drag and drop library)
+- **Framework**: Next.js 15 with App Router and Turbopack
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Drag & Drop**: @dnd-kit/core and @dnd-kit/sortable
 - **Date Handling**: dayjs for lightweight date manipulation
-- **State Management**: React hooks with local storage persistence
+- **State Management**: Zustand with persist middleware for local storage
 
 ## Getting Started
 
@@ -72,73 +74,117 @@ npm start
 src/
 ├── components/          # React components
 │   ├── Column.tsx      # Individual column component
-│   ├── KanbanBoard.tsx # Main board component
-│   ├── SearchAndFilter.tsx # Search and filtering UI
-│   └── Ticket.tsx      # Individual ticket component
+│   ├── KanbanBoard.tsx # Main board component with drag & drop
+│   ├── SearchAndFilter.tsx # Search, tag, and priority filtering
+│   └── Ticket.tsx      # Individual ticket component with priority management
 ├── constants/           # Application constants
-│   └── status.ts       # Column status definitions
+│   ├── status.ts       # Column status definitions
+│   └── priority.ts     # Priority level configurations
 ├── data/               # Mock data and static content
-│   └── mockTickets.ts  # Sample ticket data
+│   └── mockTickets.ts  # Sample ticket data with priorities
+├── services/           # API services
+│   └── api.ts          # Mock API for fetching tickets
+├── store/              # State management
+│   └── useTicketStore.ts # Zustand store with persistence
 ├── types/              # TypeScript type definitions
 │   └── ticket.ts       # Ticket and related interfaces
 └── utils/              # Utility functions
-    └── dateUtils.ts    # Date formatting and calculations
+    └── dateUtils.ts    # Date formatting and age calculations
+
+app/
+└── api/
+    └── tickets/        # Next.js API route for mock data
 ```
 
 ## Key Technical Decisions
 
 ### State Management
 
-I chose React hooks with local storage over external state management libraries because:
+I chose **Zustand** over other state management solutions because:
 
-- The application state is relatively simple and doesn't require complex state synchronization
-- Local storage provides immediate persistence without additional dependencies
-- React hooks offer excellent performance and developer experience for this use case
+- **Simplicity**: Minimal boilerplate compared to Redux or Context API
+- **Performance**: Excellent performance with automatic component optimization
+- **Persistence**: Built-in persist middleware for seamless local storage integration
+- **TypeScript**: First-class TypeScript support with excellent type inference
+- **Bundle Size**: Lightweight with tree-shaking support
+
+The store handles all ticket operations, search/filter state, and automatically persists changes to localStorage.
 
 ### Drag & Drop Library
 
-@dnd-kit was selected because:
+**@dnd-kit** was selected because:
 
-- It's the most modern and accessible drag & drop library for React
-- Excellent TypeScript support and performance
-- Built-in accessibility features
-- Active maintenance and community support
+- **Modern**: Built specifically for React 18+ with concurrent features
+- **Accessibility**: Built-in ARIA support and keyboard navigation
+- **Performance**: Efficient rendering with minimal re-renders
+- **Flexibility**: Modular architecture for custom drag behaviors
+- **TypeScript**: Excellent type safety and developer experience
+
+### Priority System as "Twist" Feature
+
+The application includes a comprehensive **priority management system** that enhances the basic requirements:
+
+- **Three Priority Levels**: High (🔥), Medium (⚡), Low (🌱) with distinct visual styling
+- **Priority Filtering**: Filter tickets by priority level in addition to tags
+- **Visual Indicators**: Color-coded priority badges with icons
+- **Inline Editing**: Click to change ticket priority directly from the ticket card
+- **Persistent Storage**: Priority changes are automatically saved to local storage
+
+This feature improves task organization and helps users quickly identify and manage high-priority items.
 
 ### Date Handling
 
-dayjs was chosen over alternatives because:
+**dayjs** was chosen over alternatives because:
 
-- Lightweight alternative to moment.js
-- Excellent tree-shaking support
-- Familiar API for developers
-- Good TypeScript support
-
-### "Twist" Feature
-
-The application includes several enhancements beyond the basic requirements:
-
-- **Comprehensive Tag System**: Advanced filtering and tag management
-- **Responsive Design**: Mobile-first approach with excellent cross-device support
-- **Enhanced Search**: Search across both ticket names and descriptions
-- **Visual Feedback**: Hover effects, loading states, and smooth transitions
+- **Lightweight**: Minimal bundle size impact
+- **Tree-shaking**: Only imports used functionality
+- **Familiar API**: Similar to moment.js for easy adoption
+- **TypeScript**: Good type definitions and support
 
 ## Testing
 
-The project is set up for testing with Jest and React Testing Library. To run tests:
+The project is set up for comprehensive testing with Jest and React Testing Library. To run tests:
 
 ```bash
+# Run all tests
 npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
 ```
+
+### Test Coverage
+
+The application achieves **94.28% statement coverage** with tests covering:
+
+- Component rendering and interactions
+- State management operations
+- Utility functions
+- API service functions
+- Type definitions and constants
+
+## API Integration
+
+The application includes a mock API implementation:
+
+- **Endpoint**: `GET /api/tickets`
+- **Features**: Simulated delay, search/filter support, error handling
+- **Data Source**: Local JSON file with realistic ticket data
+- **Response Format**: JSON with proper date serialization
 
 ## Future Enhancements
 
-- API integration for real backend data
+- Real backend API integration
 - User authentication and multi-user support
 - Real-time collaboration features
 - Advanced analytics and reporting
 - Custom column configurations
 - Ticket assignment and due dates
 - Email notifications and reminders
+- Bulk operations and batch editing
 
 ## Contributing
 
