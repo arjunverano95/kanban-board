@@ -59,15 +59,15 @@ export const KanbanBoard = () => {
   }, [setTickets, setLoading, setError]);
 
   // Load initial data only if no stored data exists
-  useEffect(() => {
-    // Wait for hydration to complete
-    if (isHydrated && tickets.length === 0) {
-      // console.log('No stored tickets found, loading from API...');
-      loadInitialData();
-    } else if (isHydrated && tickets.length > 0) {
-      // console.log('Restored tickets from localStorage:', tickets.length);
-    }
-  }, [isHydrated, tickets.length, loadInitialData]);
+  // useEffect(() => {
+  //   // Wait for hydration to complete
+  //   if (isHydrated && tickets.length === 0) {
+  //     // console.log('No stored tickets found, loading from API...');
+  //     loadInitialData();
+  //   } else if (isHydrated && tickets.length > 0) {
+  //     // console.log('Restored tickets from localStorage:', tickets.length);
+  //   }
+  // }, [isHydrated, tickets.length, loadInitialData]);
 
   // Filter tickets based on search, tags, and priority
   const filteredTickets = tickets.filter((ticket) => {
